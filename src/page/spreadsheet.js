@@ -1,8 +1,12 @@
+//表格
+
 import React, { Component } from 'react';
 
 import RowComponent from './row';
 import Dispatcher from './dispatcher';
 import Helpers from './helpers';
+
+import webeditor from './webeditor';
 
 var $ = require('jquery');
 
@@ -34,11 +38,14 @@ class SpreadsheetComponent extends Component {
             editing: false,
             id: this.props.spreadsheetId || Helpers.makeSpreadsheetId()
         };
+
+        this.ws = webeditor.createWebsocket(this.props.id || "1",this.id,this.handleMessage);
+
         
-        ws = new WebSocket('ws://localhost:8080/websocket/0/0');
-        ws.onopen = function(evt) {
-            console.log("Connection open ...");
-        }
+        // ws = new WebSocket('ws://localhost:8080/websocket/0/0');
+        // ws.onopen = function(evt) {
+        //     console.log("Connection open ...");
+        // }
     }
 
     /**
@@ -268,7 +275,7 @@ class SpreadsheetComponent extends Component {
      * @param  {Array: [number: row, number: cell]} cell [Selected Cell]
      * @param  {object} newValue                         [Value to set]
      */
-    handleCellValueChange(cell, newValue) {
+    handleCellValueChange(cell, newValue, isfar) {
         var data = this.state.data,
             row = cell[0],
             column = cell[1],
@@ -283,15 +290,16 @@ class SpreadsheetComponent extends Component {
 
         Dispatcher.publish('dataChanged', data, this.state.id);
 
-        var sendData = new Object();
-        sendData.filetype = "sheet";
-        sendData.eve = 'CellValueChange';
-        sendData.row = row;
-        sendData.column = column;
-        sendData.newValue = newValue;
-        var sendObj = JSON.stringify(sendData);
-        ws.send(sendObj);
-        
+        if(!isfar ) {
+            var sendData = new Object();
+            sendData.filetype = "sheet";
+            sendData.eve = 'CellValueChange';
+            sendData.cell = cell;
+            sendData.newValue = newValue;
+            var sendObj = JSON.stringify(sendData);
+            this.ws.send(sendObj);
+            console.log('sending...');
+        }
     }
 
     /**
@@ -316,6 +324,17 @@ class SpreadsheetComponent extends Component {
             lastBlurred: cell
         });
     }
+
+    /**
+     * handleMessage to callback
+     */
+    handleMessage(e) {
+        let message = JSON.parse(e.data);
+        if(message['eve'] == 'CellValueChange') {
+            handleCellValueChange(message[cell],message[newValue],true);
+        }
+    }
+
 }
 
 module.exports = SpreadsheetComponent;
