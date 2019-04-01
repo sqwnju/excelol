@@ -8,8 +8,8 @@ let Router = DefaultRouter;
 
 let routes = [
   {
-    "path": "/",
-    "component": require('../sheet').default,
+    "path": "/sheet/:userId/:sheetId",
+    "component": require('../$sheet').default,
     "exact": true
   },
   {

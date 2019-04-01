@@ -6,7 +6,7 @@ export default {
         }],
     ],
     routes: [{
-        path: '/',
-        component: './sheet',
+        path: '/sheet/:userId/:sheetId',
+        component: './$sheet',
     }],
 };
