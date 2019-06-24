@@ -13,7 +13,7 @@ let routes = [
     "exact": true
   },
   {
-    "component": () => React.createElement(require('C:/Users/sqw/desktop/excelol/node_modules/_umi-build-dev@1.7.0@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/page', hasRoutesInConfig: true })
+    "component": () => React.createElement(require('C:/Users/sqw/desktop/lockCell/excelol/node_modules/_umi-build-dev@1.7.7@umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'src/page', hasRoutesInConfig: true })
   }
 ];
 window.g_routes = routes;

@@ -2,7 +2,8 @@ class webeditor {
     static createWebsocket(userId,fileId,handleMessage) {
         let ws;
         if("WebSocket" in window) {
-            let url = "ws://localhost:8080/websocket/"+userId+"/"+fileId;
+            //let url = "ws://192.168.1.139:8080/sheet/"+userId+"/"+fileId;
+            let url = "ws://localhost:8080/sheet/"+userId+"/"+fileId;
             ws = new WebSocket(url);
             ws.onerror = this.onError;
             ws.onopen = this.onOpen;
@@ -17,13 +18,13 @@ class webeditor {
         return ws;
     }
     static onOpen() {
-        console.log("openning...");
+        console.log("connection established...");
     }
     static onError() {
         console.log("error...");
     }
     static onClose() {
-        console.log("closing...");
+        console.log("connection closed...");
     }
 }
 
